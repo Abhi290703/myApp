@@ -1,21 +1,45 @@
 import { NavLink } from "react-router-dom";
+import { useState } from "react";
 
 export default function Header() {
+  const [open, setOpen] = useState(false);
+
+  const linkClass = ({ isActive }) =>
+    isActive
+      ? "text-indigo-400 font-semibold"
+      : "hover:text-indigo-300 transition";
+
   return (
-    <nav className="bg-gray-900 text-white px-6 py-4">
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
+    <header className="bg-gray-900 text-white px-6 py-4 shadow-lg">
+      <div className="flex justify-between items-center max-w-7xl mx-auto">
 
-        <h1 className="text-xl font-bold">My Website</h1>
+        {/* Logo */}
+        <h1 className="text-2xl font-bold text-indigo-400">MyStore</h1>
 
-        <div className="space-x-6">
-          <NavLink to="/" className="hover:text-yellow-300">Home</NavLink>
-          <NavLink to="/products" className="hover:text-yellow-300">Products</NavLink>
-          <NavLink to="/blog" className="hover:text-yellow-300">Blog</NavLink>
-          <NavLink to="/login" className="hover:text-indigo-300">Login</NavLink>
-            <NavLink to="/signup" className="hover:text-indigo-300">Signup</NavLink>
-        </div>
+        {/* Desktop Menu */}
+        <nav className="hidden md:flex gap-8 text-lg">
+          <NavLink to="/" className={linkClass}>Home</NavLink>
+          <NavLink to="/products" className={linkClass}>Products</NavLink>
+          <NavLink to="/blog" className={linkClass}>Blog</NavLink>
+        </nav>
 
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden text-2xl"
+          onClick={() => setOpen(!open)}
+        >
+          ☰
+        </button>
       </div>
-    </nav>
+
+      {/* Mobile Menu */}
+      {open && (
+        <nav className="md:hidden mt-4 flex flex-col gap-4 px-6 text-lg">
+          <NavLink to="/" onClick={() => setOpen(false)}>Home</NavLink>
+          <NavLink to="/products" onClick={() => setOpen(false)}>Products</NavLink>
+          <NavLink to="/blog" onClick={() => setOpen(false)}>Blog</NavLink>
+        </nav>
+      )}
+    </header>
   );
 }
