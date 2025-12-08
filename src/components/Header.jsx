@@ -1,44 +1,70 @@
+// src/components/Header.jsx
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import axios from "axios";
 
-export default function Header() {
+export default function Header({ onCategoryChange }) {
   const [open, setOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
 
-  const linkClass = ({ isActive }) =>
-    isActive
-      ? "text-indigo-400 font-semibold"
-      : "hover:text-indigo-300 transition";
+  useEffect(() => {
+    async function getCategories() {
+      const res = await axios.get("https://dummyjson.com/products/categories");
+      setCategories(res.data);
+    }
+    getCategories();
+  }, []);
 
   return (
-    <header className="bg-gray-900 text-white px-6 py-4 shadow-lg">
-      <div className="flex justify-between items-center max-w-7xl mx-auto">
-
+    <header className="bg-gray-900 text-white px-6 py-4">
+      <div className="flex items-center max-w-7xl mx-auto">
         {/* Logo */}
-        <h1 className="text-2xl font-bold text-indigo-400">MyStore</h1>
+      <h1 className="text-2xl font-bold text-indigo-400">MyStore</h1>
 
-        {/* Desktop Menu */}
-        <nav className="hidden md:flex gap-8 text-lg">
-          <NavLink to="/" className={linkClass}>Home</NavLink>
-          <NavLink to="/products" className={linkClass}>Products</NavLink>
-          <NavLink to="/blog" className={linkClass}>Blog</NavLink>
+        <nav className="hidden md:flex gap-8 text-lg ml-auto">
+          <NavLink to="/">Home</NavLink>
+          <NavLink to="/product">Product</NavLink>
+          <NavLink to="/blog">Blog</NavLink>
+          <NavLink to="/userforms">UserForms</NavLink>
+
         </nav>
 
-        {/* Mobile Menu Button */}
+        {/* 3-line bar, visible on all screens */}
         <button
-          className="md:hidden text-2xl"
+          className="text-2xl"
           onClick={() => setOpen(!open)}
         >
           ☰
         </button>
       </div>
 
-      {/* Mobile Menu */}
       {open && (
-        <nav className="md:hidden mt-4 flex flex-col gap-4 px-6 text-lg">
-          <NavLink to="/" onClick={() => setOpen(false)}>Home</NavLink>
-          <NavLink to="/products" onClick={() => setOpen(false)}>Products</NavLink>
-          <NavLink to="/blog" onClick={() => setOpen(false)}>Blog</NavLink>
-        </nav>
+        <div className="bg-gray-800 mt-3 p-4 rounded max-w-7xl mx-auto">
+          <p
+            className="cursor-pointer hover:text-indigo-400 mb-2"
+            onClick={() => {
+              onCategoryChange && onCategoryChange("");
+              setOpen(false);
+            }}
+          >
+            All Products
+          </p>
+
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-2">
+            {categories.map((cat) => (
+              <p
+                key={cat}
+                className="cursor-pointer hover:text-indigo-400 capitalize"
+                onClick={() => {
+                  onCategoryChange && onCategoryChange(cat);
+                  setOpen(false);
+                }}
+              >
+                {cat}
+              </p>
+            ))}
+          </div>
+        </div>
       )}
     </header>
   );
