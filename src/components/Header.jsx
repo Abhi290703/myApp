@@ -28,14 +28,6 @@ export default function Header({ onCategoryChange }) {
           <NavLink to="/userforms">UserForms</NavLink>
 
         </nav>
-
-        {/* 3-line bar, visible on all screens */}
-        <button
-          className="text-2xl"
-          onClick={() => setOpen(!open)}
-        >
-          ☰
-        </button>
       </div>
 
       {open && (
