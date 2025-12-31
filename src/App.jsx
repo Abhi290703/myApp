@@ -7,6 +7,8 @@ import Product from "./pages/Product";
 import UserForms from "./pages/UserForms";
 import Footer from "./pages/footer";
 import Header from "./components/Header";
+import Login from "./features/Auth/Login";
+import Signup from "./features/Auth/Signup";
 
 export default function App() {
   let navigate=useNavigate()
@@ -21,6 +23,8 @@ export default function App() {
         <Route path="/product" element={<Product/>} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/userforms" element={<UserForms/>}/>
+        <Route path="/Login" element={<Login/>}/>
+        <Route path="/Signup" element={<Signup/>} />
       </Route>
     </Routes>
     <Footer/>
